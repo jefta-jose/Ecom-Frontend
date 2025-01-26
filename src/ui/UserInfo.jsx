@@ -42,7 +42,7 @@ const UserInfo = ( {currentUser} ) => {
     try {
       if(!singleUser?.isVerified){
         const response = await axios.post(
-          "https://ecom-backend-rho-taupe.vercel.app/send-verification-email",
+          "https://ecom-backend-rho-taupe.vercel.app/api/send-verification-email",
           { email: userEmail }
         );
   
