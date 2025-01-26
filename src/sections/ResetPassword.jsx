@@ -17,61 +17,76 @@ const ResetPassword = () => {
 
     const [resetPasswordParentModal, setResetPasswordParentModal] = useState(false);
 
-    // Send reset link to email
-    const handleSendResetLink = async () => {
-        setLoading(true);
-        try {
-            // Normalize the email to lowercase
-            const normalizedEmail = email.toLowerCase();
-    
-            const response = await axios.post("https://ecom-backend-ten-rose.vercel.app/api/send-password-reset-email", { email: normalizedEmail });
-            toast.success(response.data);
-            setShowTokenVerificationModal(true);
-        } catch (error) {
-            toast.error("Error sending password reset link");
-        } finally {
-            setLoading(false);
-        }
-    };
-    
-
-    // Verify the token before allowing password reset
-    const handleVerifyToken = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.post("https://ecom-backend-ten-rose.vercel.app/api/verify-token", { token });
-            toast.success(response.data);
-            setShowPasswordResetModal(true);
-            setShowTokenVerificationModal(false);
-        } catch (error) {
-            toast.error("Invalid token");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Reset password after token verification
-    const handlePasswordReset = async () => {
-        if (newPassword !== confirmPassword) {
-            toast.error("Passwords do not match");
-            return;
-        }
-    
-        setLoading(true);
-        try {
-            const response = await axios.post("https://ecom-backend-ten-rose.vercel.app/api/reset-password", { token, newPassword });
-            toast.success(response.data);
-            setShowPasswordResetModal(false);  // Close the password reset modal
-            setShowModal(false);  // Close the initial modal
-            setShowSuccessModal(true);  // Open the success confirmation modal
-        } catch (error) {
-            toast.error("Error resetting password");
-            console.log(error);
-        } finally {
-            setLoading(false);
-            navigate("/profile"); // Redirect to login page after successful reset
-        }
-    };
+// Send reset link to email
+const handleSendResetLink = async () => {
+    setLoading(true);
+    try {
+      // Normalize the email to lowercase
+      const normalizedEmail = email.toLowerCase();
+  
+      const response = await axios.post("https://ecom-backend-ten-rose.vercel.app/api/send-password-reset-email", { email: normalizedEmail });
+  
+      // Extract message from response data or use default message
+      const successMessage = response?.data?.message || "Password reset link sent.";
+      toast.success(successMessage);
+      setShowTokenVerificationModal(true);
+    } catch (error) {
+      // Extract error message or fallback to generic error message
+      const errorMessage = error.response?.data?.message || "Error sending password reset link";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Verify the token before allowing password reset
+  const handleVerifyToken = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post("https://ecom-backend-ten-rose.vercel.app/api/verify-token", { token });
+  
+      // Extract message from response data or use default message
+      const successMessage = response?.data?.message || "Token verified successfully.";
+      toast.success(successMessage);
+      setShowPasswordResetModal(true);
+      setShowTokenVerificationModal(false);
+    } catch (error) {
+      // Extract error message or fallback to generic error message
+      const errorMessage = error.response?.data?.message || "Invalid token";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Reset password after token verification
+  const handlePasswordReset = async () => {
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+  
+    setLoading(true);
+    try {
+      const response = await axios.post("https://ecom-backend-ten-rose.vercel.app/api/reset-password", { token, newPassword });
+  
+      // Extract message from response data or use default message
+      const successMessage = response?.data?.message || "Password reset successfully.";
+      toast.success(successMessage);
+      setShowPasswordResetModal(false);  // Close the password reset modal
+      setShowModal(false);  // Close the initial modal
+      setShowSuccessModal(true);  // Open the success confirmation modal
+    } catch (error) {
+      // Extract error message or fallback to generic error message
+      const errorMessage = error.response?.data?.message || "Error resetting password";
+      toast.error(errorMessage);
+      console.log(error);
+    } finally {
+      setLoading(false);
+      navigate("/profile"); // Redirect to login page after successful reset
+    }
+  };
+  
     
     const showResetModal = ()=>{
         setResetPasswordParentModal(true)

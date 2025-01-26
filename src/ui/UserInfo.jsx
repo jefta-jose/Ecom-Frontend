@@ -36,25 +36,28 @@ const UserInfo = ( {currentUser} ) => {
       return () => unsubscribe();
     }, [currentUser.id]);
 
-  const sendVerificationEmail = async () => {
-    const userEmail = getUserEmail();
-
-    try {
-      if(!singleUser?.isVerified){
-        const response = await axios.post(
-          "https://ecom-backend-ten-rose.vercel.app/api/send-verification-email",
-          { email: userEmail }
-        );
-  
-        toast.success(response.data);
-
+    const sendVerificationEmail = async () => {
+      const userEmail = getUserEmail();
+    
+      try {
+        if (!singleUser?.isVerified) {
+          const response = await axios.post(
+            "https://ecom-backend-ten-rose.vercel.app/api/send-verification-email",
+            { email: userEmail }
+          );
+    
+          // Extract message or relevant data from the response and pass it to toast
+          const successMessage = response?.data?.message || "Verification email sent successfully.";
+          toast.success(successMessage);
+        }
+      } catch (error) {
+        console.error("Error sending verification email:", error);
+        // Extract error message or fallback to a generic error message
+        const errorMessage = error.response?.data?.message || "Error sending email.";
+        toast.error(errorMessage);
       }
-
-    } catch (error) {
-      console.error("Error sending verification email:", error);
-      toast.error(error.response?.data || "Error sending email.");
-    }
-  };
+    };
+    
 
   return (
     <Container className="py-5 text-white">
