@@ -24,7 +24,7 @@ const ResetPassword = () => {
             // Normalize the email to lowercase
             const normalizedEmail = email.toLowerCase();
     
-            const response = await axios.post("http://localhost:5000/send-password-reset-email", { email: normalizedEmail });
+            const response = await axios.post("https://ecom-backend-rho-taupe.vercel.app/send-password-reset-email", { email: normalizedEmail });
             toast.success(response.data);
             setShowTokenVerificationModal(true);
         } catch (error) {
@@ -39,7 +39,7 @@ const ResetPassword = () => {
     const handleVerifyToken = async () => {
         setLoading(true);
         try {
-            const response = await axios.post("http://localhost:5000/verify-token", { token });
+            const response = await axios.post("https://ecom-backend-rho-taupe.vercel.app/verify-token", { token });
             toast.success(response.data);
             setShowPasswordResetModal(true);
             setShowTokenVerificationModal(false);
@@ -59,7 +59,7 @@ const ResetPassword = () => {
     
         setLoading(true);
         try {
-            const response = await axios.post("http://localhost:5000/reset-password", { token, newPassword });
+            const response = await axios.post("https://ecom-backend-rho-taupe.vercel.app/reset-password", { token, newPassword });
             toast.success(response.data);
             setShowPasswordResetModal(false);  // Close the password reset modal
             setShowModal(false);  // Close the initial modal
