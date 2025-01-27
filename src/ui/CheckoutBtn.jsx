@@ -6,7 +6,7 @@ import { getUserVerification } from "@/lib/localStore";
 const CheckoutBtn = ({products}) => {
   const isVerified = getUserVerification();
   const { currentUser } = store();
-  const publishableKey = "";
+  const publishableKey = import.meta.env.VITE_STRIPE_API_KEY;
   const stripePromise = loadStripe(publishableKey);
 
   const handleCheckout = async () => {
