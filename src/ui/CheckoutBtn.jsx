@@ -10,23 +10,41 @@ const CheckoutBtn = ({products}) => {
   const stripePromise = loadStripe(publishableKey);
 
   const handleCheckout = async () => {
-    const stripe = await stripePromise;
-    const response = await fetch(`${config?.baseUrl}/checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: products,
-        email: currentUser?.email,
-      }),
-    });
-    const checkoutSession = await response?.json();
-    const result = await stripe?.redirectToCheckout({
-      sessionId: checkoutSession.id,
-    });
-    if (result.error) {
-      window.alert(result?.error?.message);
+    try {
+      const stripe = await stripePromise; // Ensure stripe is loaded properly
+  
+      if (!stripe) {
+        console.error("Stripe not loaded correctly.");
+        window.alert("Stripe is not available.");
+        return;
+      }
+  
+      // Make the request to the backend to create the checkout session
+      const response = await fetch("https://ecom-backend-ten-rose.vercel.app/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: products, // Pass the products
+          email: currentUser?.email, // Pass the current user's email
+        }),
+      });
+  
+      const checkoutSession = await response.json();
+  
+      if (!checkoutSession.success) {
+        console.error("Error from server:", checkoutSession.error);
+        window.alert("Error initiating checkout! " + checkoutSession.error);
+        return;
+      }
+  
+      // Log the session URL and redirect the user to the checkout page
+      console.log("Redirecting to Stripe Checkout with URL:", checkoutSession.url);
+      
+      // Redirect the user to the Stripe Checkout URL
+      window.location.href = checkoutSession.url;
+    } catch (error) {
+      console.error("Checkout error:", error);
+      window.alert("An error occurred during checkout: " + error.message);
     }
   };
 
