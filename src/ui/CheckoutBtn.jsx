@@ -11,7 +11,7 @@ const CheckoutBtn = ({products}) => {
 
   const handleCheckout = async () => {
     const stripe = await stripePromise;
-    const response = await fetch(`https://ecom-backend-ten-rose.vercel.app/api/checkout`, {
+    const response = await fetch(`http://localhost:5000/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,8 +23,6 @@ const CheckoutBtn = ({products}) => {
     });
     const checkoutSession = await response?.json();
     
-    console.log(checkoutSession.id)
-    
     const result = await stripe?.redirectToCheckout({
       sessionId: checkoutSession.id,
     });
@@ -32,8 +30,6 @@ const CheckoutBtn = ({products}) => {
       window.alert(result?.error?.message);
     }
   };
-
-  const isButtonDisabled = !currentUser || (currentUser && !isVerified);
 
   return (
     <div className="mt-6">
@@ -44,7 +40,7 @@ const CheckoutBtn = ({products}) => {
             type="submit"
             className="w-full rounded-md border border-transparent bg-gray-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-skyText focus:ring-offset-2 focus:ring-offset-gray-50 duration-200"
           >
-            Checkout
+            Checkout With Card
           </button>
         ) : (
           <button

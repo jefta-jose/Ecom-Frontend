@@ -19,6 +19,7 @@ import Success from "./pages/Success.jsx";
 import Layout from "./ui/Layout.jsx";
 import { store } from "./store/store.js";
 import { Provider } from "react-redux";
+import MpesaSuccess from "./pages/MpesaSuccess.jsx";
 
 const RouterLayout = () => {
   return (
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: "/success",
         element: <Success />,
+      },
+      {
+        path: "/mpesasuccess",
+        element: <MpesaSuccess />,
       },
       {
         path: "/cancel",

@@ -6,6 +6,7 @@ import CartProduct from "../ui/CartProduct";
 import CheckoutBtn from "../ui/CheckoutBtn";
 import Container from "../ui/Container";
 import FormattedPrice from "../ui/FormattedPrice";
+import Mpesa from "../ui/Mpesa";
 
 const Cart = () => {
   const [totalAmt, setTotalAmt] = useState({ regular: 0, discounted: 0 });
@@ -99,7 +100,10 @@ const Cart = () => {
                   </dd>
                 </div>
               </dl>
-              <CheckoutBtn products={cartProduct} />
+
+                <CheckoutBtn products={cartProduct} />
+                <Mpesa products={cartProduct} />
+
             </section>
           </div>
         </>

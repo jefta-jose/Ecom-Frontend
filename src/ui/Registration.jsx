@@ -19,7 +19,7 @@ const Registration = () => {
   const handleRegistration = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const { firstName, lastName, email, password } =
+    const { firstName, lastName,phoneNumber, email, password } =
       Object.fromEntries(formData);
     try {
       setLoading(true);
@@ -28,6 +28,7 @@ const Registration = () => {
       await setDoc(doc(db, "users", res.user.uid), {
         firstName,
         lastName,
+        phoneNumber,
         email,
         avatar: "imageUrl",
         id: res.user.uid,
@@ -96,7 +97,15 @@ const Registration = () => {
                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-skyText sm:text-sm sm:leading-6 mt-2"
                   />
                 </div>
-                <div className="sm:col-span-4">
+                <div className="sm:col-span-3">
+                  <Label title="Phone Number" htmlFor="phoneNumber" />
+                  <input
+                    type="number"
+                    name="phoneNumber"
+                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-4 outline-none text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-skyText sm:text-sm sm:leading-6 mt-2"
+                  />
+                </div>
+                <div className="sm:col-span-3">
                   <Label title="Email address" htmlFor="email" />
                   <input
                     type="email"

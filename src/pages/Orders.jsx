@@ -17,18 +17,31 @@ const Orders = () => {
   const { currentUser } = store();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
       try {
-        const docRef = doc(db, "orders", currentUser?.email);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const orderData = docSnap?.data()?.orders;
-          setOrders(orderData);
-        } else {
-          console.log("No orders yet!");
+        const orderRef = doc(db, "orders", currentUser?.email);
+        const mpesaOrderRef = doc(db, "mpesaOrders", currentUser?.email);
+  
+        // Fetch both documents
+        const [orderSnap, mpesaOrderSnap] = await Promise.all([
+          getDoc(orderRef),
+          getDoc(mpesaOrderRef),
+        ]);
+  
+        let allOrders = [];
+  
+        if (orderSnap.exists()) {
+          allOrders = [...(orderSnap.data()?.orders || [])]; // Fetch normal orders
         }
+  
+        if (mpesaOrderSnap.exists()) {
+          allOrders = [...allOrders, ...(mpesaOrderSnap.data()?.mpesaOrders || [])]; // Merge Mpesa orders
+        }
+  
+        setOrders(allOrders);
       } catch (error) {
         console.log("Data fetching error", error);
       } finally {
@@ -37,6 +50,7 @@ const Orders = () => {
     };
     getData();
   }, []);
+    
   return (
     <Container>
       {loading ? (
