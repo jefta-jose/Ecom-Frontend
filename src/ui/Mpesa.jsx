@@ -7,7 +7,7 @@ const Mpesa = ({products}) => {
   const isVerified = getUserVerification();
 
   const handleMpesaCheckout = async () => {
-    const response = await fetch(`http://localhost:5000/stkpush`, {
+    const response = await fetch(`https://ecom-backend-ten-rose.vercel.app/api/stkpush`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
