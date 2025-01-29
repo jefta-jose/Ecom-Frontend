@@ -23,7 +23,7 @@ const Orders = () => {
       setLoading(true);
       try {
         const orderRef = doc(db, "orders", currentUser?.email);
-        const mpesaOrderRef = doc(db, "mpesaOrders", currentUser?.email);
+        const mpesaOrderRef = doc(db, "mpesaOrders", currentUser?.phoneNumber);
   
         // Fetch both documents
         const [orderSnap, mpesaOrderSnap] = await Promise.all([
