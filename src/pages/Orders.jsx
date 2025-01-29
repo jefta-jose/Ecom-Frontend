@@ -3,7 +3,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc , getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -23,13 +23,7 @@ const Orders = () => {
       setLoading(true);
       try {
         const orderRef = doc(db, "orders", currentUser?.email);
-        const mpesaOrderRef = doc(db, "mpesaOrders", currentUser?.phoneNumber);
-  
-        // Fetch both documents
-        const [orderSnap, mpesaOrderSnap] = await Promise.all([
-          getDoc(orderRef),
-          getDoc(mpesaOrderRef),
-        ]);
+        const orderSnap = await getDoc(orderRef);
   
         let allOrders = [];
   
@@ -37,9 +31,16 @@ const Orders = () => {
           allOrders = [...(orderSnap.data()?.orders || [])]; // Fetch normal orders
         }
   
-        if (mpesaOrderSnap.exists()) {
-          allOrders = [...allOrders, ...(mpesaOrderSnap.data()?.mpesaOrders || [])]; // Merge Mpesa orders
-        }
+        // ✅ Fetch all Mpesa transactions for this user
+        const mpesaQuery = query(
+          collection(db, "mpesaOrders"),
+          where("phoneNumber", "==", currentUser?.phoneNumber)
+        );
+  
+        const mpesaOrderSnap = await getDocs(mpesaQuery);
+  
+        const mpesaOrders = mpesaOrderSnap.docs.map(doc => doc.data()); // Convert to array
+        allOrders = [...allOrders, ...mpesaOrders]; // Merge normal + Mpesa orders
   
         setOrders(allOrders);
       } catch (error) {
@@ -48,6 +49,7 @@ const Orders = () => {
         setLoading(false);
       }
     };
+  
     getData();
   }, []);
     
