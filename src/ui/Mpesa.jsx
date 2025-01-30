@@ -12,7 +12,7 @@ const IntaSendPayButton = ({ products }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: products,
-          user: currentUser,
+          phoneNumber: currentUser?.phoneNumber,
         }),
       });
     }
