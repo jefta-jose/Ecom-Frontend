@@ -32,9 +32,15 @@ const Orders = () => {
         }
   
         // ✅ Fetch all Mpesa transactions for this user
+        let userPhoneNumber = currentUser?.phoneNumber;
+
+        if (userPhoneNumber.startsWith("0")) {
+          userPhoneNumber = "254" + userPhoneNumber.slice(1);
+        }
+
         const mpesaQuery = query(
           collection(db, "mpesaOrders"),
-          where("phoneNumber", "==", currentUser?.phoneNumber)
+          where("phoneNumber", "==", userPhoneNumber)
         );
   
         const mpesaOrderSnap = await getDocs(mpesaQuery);
