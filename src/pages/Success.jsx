@@ -29,7 +29,7 @@ const Success = () => {
                 userEmail: currentUser?.email,
                 paymentId: sessionId,
                 orderItems: cartProduct,
-                paymentMethod: "stripe",
+                paymentMethod: "Stripe",
                 userId: currentUser?.id,
               }),
             });
@@ -41,7 +41,7 @@ const Success = () => {
                   userEmail: currentUser?.email,
                   paymentId: sessionId,
                   orderItems: cartProduct,
-                  paymentMethod: "stripe",
+                  paymentMethod: "Stripe",
                 },
               ],
             });
