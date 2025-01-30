@@ -7,7 +7,7 @@ const IntaSendPayButton = ({ products }) => {
 
   const handleMpesaCheckout = async () => {
     if(currentUser){
-      const response = await fetch("http://localhost:5000/intasendCheckout", {
+      const response = await fetch(`https://ecom-backend-ten-rose.vercel.app/api/stkpush`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
